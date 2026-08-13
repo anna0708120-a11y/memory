@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: lin-soul-mcp
+    runtime: python
+    plan: free
+    buildCommand: pip install .
+    startCommand: PYTHONPATH=src python -m lin_soul.server
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: LIN_SOUL_AUTH_TOKEN
+        sync: false
