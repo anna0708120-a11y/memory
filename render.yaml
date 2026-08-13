@@ -4,7 +4,7 @@ services:
     runtime: python
     plan: free
     buildCommand: pip install .
-    startCommand: PYTHONPATH=src python -m lin_soul.server
+    startCommand: python -m lin_soul.server
     envVars:
       - key: DATABASE_URL
         sync: false
