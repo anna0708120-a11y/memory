@@ -45,7 +45,11 @@ def memory_get(key: str, auth_token: str) -> dict[str, Any]:
 
 
 def main() -> None:
-    mcp.run(transport="streamable-http")
+    mcp.run(
+        transport="streamable-http",
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", "8000")),
+    )
 
 
 if __name__ == "__main__":
