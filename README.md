@@ -6,8 +6,10 @@ Minimal authenticated MCP server for Lin's durable cross-device memory.
 
 Phase 1 exposes exactly two MCP tools:
 
-- `memory_write(key, value, auth_token)`
-- `memory_get(key, auth_token)`
+- `memory_write(key, value)`
+- `memory_get(key)`
+
+All requests must include `Authorization: Bearer <LIN_SOUL_AUTH_TOKEN>`.
 
 The server uses PostgreSQL through `DATABASE_URL`. The schema is created automatically if it does not exist:
 
@@ -24,7 +26,7 @@ CREATE TABLE memories (
 Set these Render secrets/environment variables. Do not commit their values:
 
 - `DATABASE_URL` — Neon pooled or direct PostgreSQL connection string
-- `LIN_SOUL_AUTH_TOKEN` — private bearer token
+- `LIN_SOUL_AUTH_TOKEN` — private HTTP Bearer token
 
 The free Render web service has no local durable disk; all durable state is in Neon.
 

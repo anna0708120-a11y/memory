@@ -9,14 +9,21 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 import pytest
 
-from lin_soul.auth import authorized
+os.environ.setdefault("LIN_SOUL_AUTH_TOKEN", "test-token")
+
+from lin_soul.auth import LinSoulTokenVerifier
 
 
-def test_auth_rejects_bad_token() -> None:
-    with pytest.raises(PermissionError):
-        authorized("wrong")
+@pytest.mark.anyio
+async def test_verifier_rejects_bad_token(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("LIN_SOUL_AUTH_TOKEN", "secret")
+    assert await LinSoulTokenVerifier().verify_token("wrong") is None
 
 
-def test_auth_accepts_correct_token(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr("lin_soul.auth.TOKEN", "secret")
-    authorized("secret")
+@pytest.mark.anyio
+async def test_verifier_accepts_correct_token(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("LIN_SOUL_AUTH_TOKEN", "secret")
+    token = await LinSoulTokenVerifier().verify_token("secret")
+    assert token is not None
+    assert token.client_id == "lin-soul-client"
+    assert token.scopes == []
